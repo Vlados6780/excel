@@ -1,20 +1,32 @@
-function showTextInputs(fileInput) {
-    const textInputs = fileInput.parentNode.querySelectorAll('input[type="text"]');
+function showProviderInputs(fileInput) {
+    const providerGroup = fileInput.parentNode;
+    const textInputs = providerGroup.querySelectorAll('input[type="text"]');
     textInputs.forEach(input => input.classList.add('visible'));
 }
 
-function showSuccessMessage() {
-    const successMessage = document.querySelector('.success-message');
-    successMessage.style.display = 'block';
+function showProductInputs(fileInput) {
+    const productGroup = fileInput.parentNode.nextElementSibling;
+    const textInputs = productGroup.querySelectorAll('input[type="text"]');
+    textInputs.forEach(input => input.classList.add('visible'));
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    const form = document.getElementById("productForm");
-    form.addEventListener("submit", function(event) {
-        event.preventDefault();
-        showSuccessMessage();
-        setTimeout(() => {
-            form.submit();
-        }, 1000);
-    });
-});
+function addProductBlock() {
+    const form = document.getElementById('productForm');
+    const productBlockCount = document.querySelectorAll('.product-block').length;
+    const block = document.createElement('div');
+    block.className = 'product-block';
+    block.innerHTML =
+        `<div class="input-group provider-group">
+            <input type="file" name="products[${productBlockCount}].imageOfProvider" accept="image/*" capture="environment" required onchange="showProviderInputs(this)" />
+            <input type="text" name="products[${productBlockCount}].nameOfProvider" placeholder="Enter the name of provider" />
+        </div>
+        <div class="input-group product-group">
+            <input type="file" name="products[${productBlockCount}].imageOfProduct" accept="image/*" capture="environment" required onchange="showProductInputs(this)" />
+        </div>
+        <div class="input-group product-group">
+            <input type="text" name="products[${productBlockCount}].descriptionOfProduct" placeholder="Enter a description of product" />
+            <input type="text" name="products[${productBlockCount}].moq" placeholder="Enter the MOQ" />
+        </div>`;
+    form.insertBefore(block, document.getElementById('addBlockBtn'));
+}
+

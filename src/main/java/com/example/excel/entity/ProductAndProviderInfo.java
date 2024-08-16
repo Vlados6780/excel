@@ -16,4 +16,9 @@ public class ProductAndProviderInfo  {
     private MultipartFile imageOfProvider;
     private MultipartFile imageOfProduct;
 
+    // new fields
+    private int price;  // Price
+    private String ctn; //CTN
+    private String moq;  //MOQ
+
 }

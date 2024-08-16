@@ -24,7 +24,7 @@ public class DefaultProductAndProviderInfoDAO implements ProductAndProviderInfoD
     }
 
     public List<ProductAndProviderInfoWithBytes> getAllProductAndProviderInfo() {
-        return new ArrayList<>(productAndProviderInfoWithBytesList);
+        return new ArrayList<>(this.productAndProviderInfoWithBytesList);
     }
 
     private ProductAndProviderInfoWithBytes getProductAndProviderInfoWithBytes(
@@ -52,7 +52,7 @@ public class DefaultProductAndProviderInfoDAO implements ProductAndProviderInfoD
 
 
     public void clearProductAndProviderInfoList() {
-        productAndProviderInfoWithBytesList.clear();
+        this.productAndProviderInfoWithBytesList.clear();
     }
 
 

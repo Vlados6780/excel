@@ -3,40 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>Product Excel Program</title>
-
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <script th:src="@{/js/script.js}"></script>
 
 </head>
 <body>
-
 <h1>Enter Product Details</h1>
 
-<!-- Форма для полей и кнопки OK -->
-<form id="productForm" th:method="POST" th:action="@{/excel/save}" th:object="${info}" enctype="multipart/form-data">
-    <div class="product-block">
-        <div class="input-group">
-            <input type="file" name="file1" th:field="*{imageOfProvider}" accept="image/*" capture="environment" required onchange="showTextInputs(this)" />
-            <input type="text" name="providerName1" th:field="*{nameOfProvider}" placeholder="Enter the name of provider" required />
+<form id="productForm" th:method="POST" enctype="multipart/form-data" th:action="@{/excel/save}" th:object="${form}">
+    <div class="product-block" th:each="product, iterStat : *{products}">
+        <!-- Provider Block -->
+        <div class="input-group provider-group">
+            <input type="file" name="file1" accept="image/*" capture="environment" required onchange="showProviderInputs(this)" />
+            <input type="text" name="providerName1" th:field="*{products[__${iterStat.index}__].nameOfProvider}" placeholder="Enter the name of provider" />
         </div>
-        <div class="input-group">
-            <input type="file" name="file2" th:field="*{imageOfProduct}" accept="image/*" capture="environment" required onchange="showTextInputs(this)" />
-            <input type="text" name="productDescription1" th:field="*{descriptionOfProduct}" placeholder="Enter a description of product" required />
+
+        <!-- Product Block -->
+        <div class="input-group product-group">
+            <input type="file" name="file2" th:field="*{products[__${iterStat.index}__].imageOfProduct}" accept="image/*" capture="environment" required onchange="showProductInputs(this)" />
         </div>
-        <div class="success-message">Data added successfully</div>
+        <div class="input-group product-group">
+            <input type="text" name="productDescription1" th:field="*{products[__${iterStat.index}__].descriptionOfProduct}" placeholder="Enter a description of product" />
+            <input type="text" name="productMOQ1" th:field="*{products[__${iterStat.index}__].moq}" placeholder="Enter the MOQ" />
+        </div>
     </div>
-    <button type="submit">OK</button>
+    <button id="addBlockBtn" type="button" onclick="addProductBlock()">+</button>
+    <br><br>
+    <button id="submitBtn" type="submit">Save and Download Excel</button>
 </form>
 
-<br><br>
 
-<!-- Форма для кнопки Upload and Generate Excel -->
-<form th:method="POST" th:action="@{/excel/download}" enctype="multipart/form-data" >
-    <button id="submitBtn" type="submit">Generate and Download Excel</button>
-</form>
 
 </body>
 </html>
+
+
+
 
 
 

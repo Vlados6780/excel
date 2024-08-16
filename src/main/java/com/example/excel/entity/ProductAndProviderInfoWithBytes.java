@@ -10,8 +10,13 @@ import lombok.NoArgsConstructor;
 public class ProductAndProviderInfoWithBytes {
 
     private String name;
-    private String description;
+    private String description; // now for comments
     private byte[] imageOfProviderWithBytes;
     private byte[] imageOfProductWithBytes;
+
+    // new fields
+    private int price;  // Price
+    private String ctn; //CTN
+    private String moq;  //MOQ
 
 }

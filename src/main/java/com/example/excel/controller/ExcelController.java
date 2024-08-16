@@ -2,6 +2,7 @@ package com.example.excel.controller;
 
 import com.example.excel.entity.ProductAndProviderInfo;
 import com.example.excel.entity.ProductAndProviderInfoWithBytes;
+import com.example.excel.dto.ProductsCreationDTO;
 import com.example.excel.service.ExcelService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -10,9 +11,9 @@ import org.springframework.stereotype.Controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import java.io.IOException;
 import java.util.List;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -21,27 +22,21 @@ public class ExcelController {
 
     private final ExcelService excelService;
 
-
     @GetMapping()
     public String uploadPage(Model model) {
-        model.addAttribute("info", new ProductAndProviderInfo());
+        model.addAttribute("form", new ProductsCreationDTO());
         return "upload";
     }
+    @PostMapping("/save")
+    public ResponseEntity<byte[]> saveAfterClickingOK(@ModelAttribute ProductsCreationDTO form) throws IOException {
 
+        // part 1
+        for (ProductAndProviderInfo productAndProviderInfo : form.getProducts()) {
 
-   @PostMapping("/save")
-    public String saveAfterClickingOK(
-            @ModelAttribute("info") ProductAndProviderInfo info
-    ) throws IOException {
+            this.excelService.save(productAndProviderInfo);
+        }
 
-        this.excelService.save(info);
-
-        return "redirect:/excel";
-   }
-
-
-    @PostMapping("/download")
-    public ResponseEntity<byte[]> downloadExcel() throws IOException {
+          // part 2
         List<ProductAndProviderInfoWithBytes> data = this.excelService.getAllInfo();
 
         byte[] excelContent = this.excelService.generateExcel(data);

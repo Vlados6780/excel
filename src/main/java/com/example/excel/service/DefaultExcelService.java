@@ -48,6 +48,9 @@ public class DefaultExcelService implements ExcelService{
             sheet.setColumnWidth(7, 20 * 256);
             sheet.setColumnWidth(8, 20 * 256);
             sheet.setColumnWidth(9, 20 * 256);
+            sheet.setColumnWidth(11, 20 * 256);
+            sheet.setColumnWidth(12, 20 * 256);
+            sheet.setColumnWidth(13, 20 * 256);
 
             int rowNum = 0;
             Row headerRow = sheet.createRow(rowNum++);
@@ -56,8 +59,8 @@ public class DefaultExcelService implements ExcelService{
             headerRow.createCell(5).setCellValue("Comments");
             headerRow.createCell(7).setCellValue("Product Image");
             headerRow.createCell(11).setCellValue("Price");
-            headerRow.createCell(13).setCellValue("MOQ");
-            headerRow.createCell(15).setCellValue("CTN");
+            headerRow.createCell(12).setCellValue("MOQ");
+            headerRow.createCell(13).setCellValue("CTN");
 
             for (ProductAndProviderInfoWithBytes info : data) {
                 Row row = sheet.createRow(rowNum);
@@ -75,8 +78,8 @@ public class DefaultExcelService implements ExcelService{
 
                 // new fields
                 row.createCell(11).setCellValue(info.getPrice());
-                row.createCell(13).setCellValue(info.getMoq());
-                row.createCell(15).setCellValue(info.getCtn());
+                row.createCell(12).setCellValue(info.getMoq());
+                row.createCell(13).setCellValue(info.getCtn());
 
                 rowNum += 15;  // move to the next set of rows (14 for image + 1 for spacing)
             }

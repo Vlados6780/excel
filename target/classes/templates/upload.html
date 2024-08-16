@@ -23,8 +23,10 @@
             <input type="file" name="file2" th:field="*{products[__${iterStat.index}__].imageOfProduct}" accept="image/*" capture="environment" required onchange="showProductInputs(this)" />
         </div>
         <div class="input-group product-group">
-            <input type="text" name="productDescription1" th:field="*{products[__${iterStat.index}__].descriptionOfProduct}" placeholder="Enter a description of product" />
+            <input type="text" name="productDescription1" th:field="*{products[__${iterStat.index}__].descriptionOfProduct}" placeholder="Enter Comments" />
+            <input type="text" name="productPrice1" th:field="*{products[__${iterStat.index}__].price}" placeholder="Enter the Price" />
             <input type="text" name="productMOQ1" th:field="*{products[__${iterStat.index}__].moq}" placeholder="Enter the MOQ" />
+            <input type="text" name="productCTN1" th:field="*{products[__${iterStat.index}__].ctn}" placeholder="Enter the CTN" />
         </div>
     </div>
     <button id="addBlockBtn" type="button" onclick="addProductBlock()">+</button>

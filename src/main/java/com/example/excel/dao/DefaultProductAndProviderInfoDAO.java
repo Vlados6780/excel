@@ -33,9 +33,16 @@ public class DefaultProductAndProviderInfoDAO implements ProductAndProviderInfoD
         ProductAndProviderInfoWithBytes productAndProviderInfoWithBytes =
                 new ProductAndProviderInfoWithBytes();
 
+        // part of provider
         productAndProviderInfoWithBytes.setName(productAndProviderInfo.getNameOfProvider());
-        productAndProviderInfoWithBytes.setDescription(productAndProviderInfo.getDescriptionOfProduct());
 
+        // part of product
+        productAndProviderInfoWithBytes.setDescription(productAndProviderInfo.getDescriptionOfProduct()); //comments
+        productAndProviderInfoWithBytes.setPrice(productAndProviderInfo.getPrice());
+        productAndProviderInfoWithBytes.setCtn(productAndProviderInfo.getCtn());
+        productAndProviderInfoWithBytes.setMoq(productAndProviderInfo.getMoq());
+
+        // part with images
         InputStream inputStream1 = productAndProviderInfo.getImageOfProvider().getInputStream();
         byte[] imageOfProviderInBytes = IOUtils.toByteArray(inputStream1);
         productAndProviderInfoWithBytes.setImageOfProviderWithBytes(imageOfProviderInBytes);

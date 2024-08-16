@@ -14,8 +14,4 @@ public class ProductsCreationDTO {
 
     private List<ProductAndProviderInfo> products = new ArrayList<>();
 
-    public void addProduct(ProductAndProviderInfo product) {
-        this.products.add(product);
-    }
-
 }

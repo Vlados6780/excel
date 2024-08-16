@@ -24,8 +24,10 @@ function addProductBlock() {
             <input type="file" name="products[${productBlockCount}].imageOfProduct" accept="image/*" capture="environment" required onchange="showProductInputs(this)" />
         </div>
         <div class="input-group product-group">
-            <input type="text" name="products[${productBlockCount}].descriptionOfProduct" placeholder="Enter a description of product" />
+            <input type="text" name="products[${productBlockCount}].descriptionOfProduct" placeholder="Enter Comments" />
+            <input type="text" name="products[${productBlockCount}].price" placeholder="Enter the Price" />
             <input type="text" name="products[${productBlockCount}].moq" placeholder="Enter the MOQ" />
+            <input type="text" name="products[${productBlockCount}].ctn" placeholder="Enter the CTN" />
         </div>`;
     form.insertBefore(block, document.getElementById('addBlockBtn'));
 }

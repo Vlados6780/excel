@@ -37,7 +37,7 @@ public class DefaultExcelService implements ExcelService{
     @Override
     public byte[] generateExcel(List<ProductAndProviderInfoWithBytes> data) throws IOException {
         try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-            Sheet sheet = workbook.createSheet("Product and Provider Info");
+            Sheet sheet = workbook.createSheet("Products info");
 
             // set column widths
             sheet.setColumnWidth(0, 20 * 256);
@@ -53,8 +53,11 @@ public class DefaultExcelService implements ExcelService{
             Row headerRow = sheet.createRow(rowNum++);
             headerRow.createCell(0).setCellValue("Provider Name");
             headerRow.createCell(1).setCellValue("Provider Image");
-            headerRow.createCell(5).setCellValue("Product Description");
+            headerRow.createCell(5).setCellValue("Comments");
             headerRow.createCell(7).setCellValue("Product Image");
+            headerRow.createCell(11).setCellValue("Price");
+            headerRow.createCell(13).setCellValue("MOQ");
+            headerRow.createCell(15).setCellValue("CTN");
 
             for (ProductAndProviderInfoWithBytes info : data) {
                 Row row = sheet.createRow(rowNum);
@@ -62,13 +65,18 @@ public class DefaultExcelService implements ExcelService{
                 row.createCell(0).setCellValue(info.getName());
 
                 // provider image
-                addImageToCell(workbook, sheet, info.getImageOfProviderWithBytes(), rowNum, 1);  // provider Image in column 1
+                addImageToCell(workbook, sheet, info.getImageOfProviderWithBytes(), rowNum, 1);  // provider image in column 1
 
                 // product description
-                row.createCell(5).setCellValue(info.getDescription());  // product Description in column 5
+                row.createCell(5).setCellValue(info.getDescription());  // product description in column 5
 
                 // product image
-                addImageToCell(workbook, sheet, info.getImageOfProductWithBytes(), rowNum, 7);  // product Image in column 7
+                addImageToCell(workbook, sheet, info.getImageOfProductWithBytes(), rowNum, 7);  // product image in column 7
+
+                // new fields
+                row.createCell(11).setCellValue(info.getPrice());
+                row.createCell(13).setCellValue(info.getMoq());
+                row.createCell(15).setCellValue(info.getCtn());
 
                 rowNum += 15;  // move to the next set of rows (14 for image + 1 for spacing)
             }

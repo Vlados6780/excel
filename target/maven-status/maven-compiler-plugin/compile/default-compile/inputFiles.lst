@@ -2,8 +2,11 @@ D:\university\som\excel_project\excel\src\main\java\com\example\excel\controller
 D:\university\som\excel_project\excel\src\main\java\com\example\excel\dao\DefaultProductAndProviderInfoDAO.java
 D:\university\som\excel_project\excel\src\main\java\com\example\excel\dao\ProductAndProviderInfoDAO.java
 D:\university\som\excel_project\excel\src\main\java\com\example\excel\dto\ProductsCreationDTO.java
-D:\university\som\excel_project\excel\src\main\java\com\example\excel\entity\ProductAndProviderInfo.java
-D:\university\som\excel_project\excel\src\main\java\com\example\excel\entity\ProductAndProviderInfoWithBytes.java
+D:\university\som\excel_project\excel\src\main\java\com\example\excel\entity\bytes\ProductInfoWithBytes.java
+D:\university\som\excel_project\excel\src\main\java\com\example\excel\entity\info\ProductInfo.java
+D:\university\som\excel_project\excel\src\main\java\com\example\excel\entity\info\ProviderInfo.java
 D:\university\som\excel_project\excel\src\main\java\com\example\excel\ExcelApplication.java
+D:\university\som\excel_project\excel\src\main\java\com\example\excel\service\compressor\ImageCompressor.java
 D:\university\som\excel_project\excel\src\main\java\com\example\excel\service\DefaultExcelService.java
 D:\university\som\excel_project\excel\src\main\java\com\example\excel\service\ExcelService.java
+D:\university\som\excel_project\excel\src\main\java\com\example\excel\service\imageCell\ImageToAdd.java

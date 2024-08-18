@@ -11,24 +11,31 @@ function showProductInputs(fileInput) {
 }
 
 function addProductBlock() {
-    const form = document.getElementById('productForm');
-    const productBlockCount = document.querySelectorAll('.product-block').length;
-    const block = document.createElement('div');
-    block.className = 'product-block';
-    block.innerHTML =
-        `<div class="input-group provider-group">
-            <input type="file" name="products[${productBlockCount}].imageOfProvider" accept="image/*" capture="environment" required onchange="showProviderInputs(this)" />
-            <input type="text" name="products[${productBlockCount}].nameOfProvider" placeholder="Enter the name of provider" />
-        </div>
-        <div class="input-group product-group">
-            <input type="file" name="products[${productBlockCount}].imageOfProduct" accept="image/*" capture="environment" required onchange="showProductInputs(this)" />
-        </div>
-        <div class="input-group product-group">
-            <input type="text" name="products[${productBlockCount}].descriptionOfProduct" placeholder="Enter Comments" />
-            <input type="text" name="products[${productBlockCount}].price" placeholder="Enter the Price" />
-            <input type="text" name="products[${productBlockCount}].moq" placeholder="Enter the MOQ" />
-            <input type="text" name="products[${productBlockCount}].ctn" placeholder="Enter the CTN" />
-        </div>`;
-    form.insertBefore(block, document.getElementById('addBlockBtn'));
+    const container = document.getElementById('productBlocksContainer');
+    if (!container) {
+        console.error('Container element not found.');
+        return;
+    }
+        const productBlockCount = document.querySelectorAll('.product-block').length;
+
+        const block = document.createElement('div');
+        block.className = 'product-block';
+        block.innerHTML = `
+            <div class="input-group product-group">
+                <input type="file" name="products[${productBlockCount}].imageOfProduct" accept="image/*" capture="environment" required onchange="showProductInputs(this)" />
+            </div>
+            <div class="input-group product-group">
+                <input type="text" name="products[${productBlockCount}].descriptionOfProduct" placeholder="Enter Comments" />
+                <input type="text" name="products[${productBlockCount}].price" placeholder="Enter the Price" />
+                <input type="text" name="products[${productBlockCount}].moq" placeholder="Enter the MOQ" />
+                <input type="text" name="products[${productBlockCount}].ctn" placeholder="Enter the CTN" />
+            </div>`;
+
+        // move down the block of text inputs
+        container.appendChild(block);
+
+    // move down the add block button
+    const addBlockBtn = document.getElementById('addBlockBtn');
+    container.appendChild(addBlockBtn);
 }
 

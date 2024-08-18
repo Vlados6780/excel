@@ -1,14 +1,19 @@
 package com.example.excel.service;
 
 import com.example.excel.dao.ProductAndProviderInfoDAO;
-import com.example.excel.entity.ProductAndProviderInfo;
-import com.example.excel.entity.ProductAndProviderInfoWithBytes;
+import com.example.excel.entity.bytes.ProductInfoWithBytes;
+import com.example.excel.entity.info.ProductInfo;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.compress.utils.IOUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 import java.util.List;
+
+import static com.example.excel.service.compressor.ImageCompressor.compressImage;
+import static com.example.excel.service.imageCell.ImageToAdd.addImageToCell;
 
 @Service
 @RequiredArgsConstructor
@@ -17,27 +22,27 @@ public class DefaultExcelService implements ExcelService{
    private final ProductAndProviderInfoDAO productAndProviderInfoDAO;
 
     @Override
-    public void save(ProductAndProviderInfo productAndProviderInfo) throws IOException {
+    public void save(ProductInfo productInfo) throws IOException {
 
-        this.productAndProviderInfoDAO.addProductAndProviderInfo(productAndProviderInfo);
+        this.productAndProviderInfoDAO.addProductInfo(productInfo);
 
-    }
-
-    @Override
-    public List<ProductAndProviderInfoWithBytes> getAllInfo() {
-        return this.productAndProviderInfoDAO.getAllProductAndProviderInfo();
     }
 
     @Override
     public void clearAllInfo() {
-        this.productAndProviderInfoDAO.clearProductAndProviderInfoList();
+        this.productAndProviderInfoDAO.clearProductInfoList();
+    }
+
+    @Override
+    public List<ProductInfoWithBytes> getAllInfoProducts() {
+        return productAndProviderInfoDAO.getAllProducts();
     }
 
     /// excel part
     @Override
-    public byte[] generateExcel(List<ProductAndProviderInfoWithBytes> data) throws IOException {
+    public byte[] generateExcel(List<ProductInfoWithBytes> data, String nameOfProvider, MultipartFile imageOfProvider) throws IOException {
         try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-            Sheet sheet = workbook.createSheet("Products info");
+            Sheet sheet = workbook.createSheet("Provider - "+ nameOfProvider);
 
             // set column widths
             sheet.setColumnWidth(0, 20 * 256);
@@ -62,22 +67,30 @@ public class DefaultExcelService implements ExcelService{
             headerRow.createCell(12).setCellValue("MOQ");
             headerRow.createCell(13).setCellValue("CTN");
 
-            for (ProductAndProviderInfoWithBytes info : data) {
+            Row headerRow2 = sheet.createRow(rowNum++);
+            headerRow2.createCell(0).setCellValue(nameOfProvider);
+            // image of provider in bytes
+            InputStream inputStream = imageOfProvider.getInputStream();
+            byte[] imageOfProviderInBytes = IOUtils.toByteArray(inputStream);
+            inputStream.close();
+
+            byte[] compressedImageOfProvider = compressImage(imageOfProviderInBytes, 300, 300, 0.75f);
+
+            addImageToCell(workbook, sheet, compressedImageOfProvider, 1, 1);
+
+
+            for (ProductInfoWithBytes info : data) {
                 Row row = sheet.createRow(rowNum);
-
-                row.createCell(0).setCellValue(info.getName());
-
-                // provider image
-                addImageToCell(workbook, sheet, info.getImageOfProviderWithBytes(), rowNum, 1);  // provider image in column 1
 
                 // product description
                 row.createCell(5).setCellValue(info.getDescription());  // product description in column 5
 
                 // product image
-                addImageToCell(workbook, sheet, info.getImageOfProductWithBytes(), rowNum, 7);  // product image in column 7
+                byte[] compressedImageOfProduct = compressImage(info.getImageOfProductWithBytes(), 300, 300, 0.75f);
+                addImageToCell(workbook, sheet, compressedImageOfProduct, rowNum, 7);  // product image in column 7
 
                 // new fields
-                row.createCell(11).setCellValue(info.getPrice());
+                row.createCell(11).setCellValue(Double.parseDouble(info.getPrice().replace(",", ".")));
                 row.createCell(12).setCellValue(info.getMoq());
                 row.createCell(13).setCellValue(info.getCtn());
 
@@ -88,30 +101,5 @@ public class DefaultExcelService implements ExcelService{
             return out.toByteArray();
         }
     }
-
-    private void addImageToCell(Workbook workbook, Sheet sheet, byte[] imageBytes, int rowNum, int colNum) throws IOException {
-        int pictureIdx = workbook.addPicture(imageBytes, Workbook.PICTURE_TYPE_PNG);
-        CreationHelper helper = workbook.getCreationHelper();
-        Drawing<?> drawing = sheet.createDrawingPatriarch();
-
-        ClientAnchor anchor = helper.createClientAnchor();
-        anchor.setCol1(colNum);
-        anchor.setRow1(rowNum);
-        anchor.setCol2(colNum + 3);  // keep width increase by 3 columns
-        anchor.setRow2(rowNum + 14);  // increase height by 14 rows
-
-        Picture pict = drawing.createPicture(anchor, pictureIdx);
-
-        // resize to fit the anchor area while maintaining aspect ratio
-        pict.resize();
-
-        // fine-tune size if necessary
-        double widthInPixels = sheet.getColumnWidthInPixels(colNum) * 3;  // 3 columns wide
-        double heightInPixels = sheet.getDefaultRowHeightInPoints() * 14 * 96 / 72;  // 14 rows high, convert points to pixels
-
-        pict.resize(widthInPixels / pict.getImageDimension().getWidth(),
-                heightInPixels / pict.getImageDimension().getHeight());
-    }
-
 
 }

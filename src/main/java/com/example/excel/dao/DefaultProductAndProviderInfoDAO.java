@@ -1,7 +1,7 @@
 package com.example.excel.dao;
 
-import com.example.excel.entity.ProductAndProviderInfo;
-import com.example.excel.entity.ProductAndProviderInfoWithBytes;
+import com.example.excel.entity.bytes.ProductInfoWithBytes;
+import com.example.excel.entity.info.ProductInfo;
 import org.apache.commons.compress.utils.IOUtils;
 import org.springframework.stereotype.Component;
 import java.io.IOException;
@@ -11,55 +11,47 @@ import java.util.List;
 
 @Component
 public class DefaultProductAndProviderInfoDAO implements ProductAndProviderInfoDAO {
-    private final List<ProductAndProviderInfoWithBytes> productAndProviderInfoWithBytesList =
+    private final List<ProductInfoWithBytes> productInfoWithBytesList =
             new ArrayList<>();
 
-    public void addProductAndProviderInfo(ProductAndProviderInfo productAndProviderInfo) throws IOException {
+    public void addProductInfo(ProductInfo productInfo) throws IOException {
 
-        ProductAndProviderInfoWithBytes productAndProviderInfoWithBytes =
-                getProductAndProviderInfoWithBytes(productAndProviderInfo);
+        ProductInfoWithBytes productInfoWithBytes =
+                getProductInfoWithBytes(productInfo);
 
-        this.productAndProviderInfoWithBytesList.add(productAndProviderInfoWithBytes);
+        this.productInfoWithBytesList.add(productInfoWithBytes);
 
     }
 
-    public List<ProductAndProviderInfoWithBytes> getAllProductAndProviderInfo() {
-        return new ArrayList<>(this.productAndProviderInfoWithBytesList);
+    public List<ProductInfoWithBytes> getAllProducts() {
+        return new ArrayList<>(this.productInfoWithBytesList);
     }
 
-    private ProductAndProviderInfoWithBytes getProductAndProviderInfoWithBytes(
-            ProductAndProviderInfo productAndProviderInfo) throws IOException {
+    private ProductInfoWithBytes getProductInfoWithBytes(
+            ProductInfo productInfo) throws IOException {
 
-        ProductAndProviderInfoWithBytes productAndProviderInfoWithBytes =
-                new ProductAndProviderInfoWithBytes();
-
-        // part of provider
-        productAndProviderInfoWithBytes.setName(productAndProviderInfo.getNameOfProvider());
+        ProductInfoWithBytes productInfoWithBytes =
+                new ProductInfoWithBytes();
 
         // part of product
-        productAndProviderInfoWithBytes.setDescription(productAndProviderInfo.getDescriptionOfProduct()); //comments
-        productAndProviderInfoWithBytes.setPrice(productAndProviderInfo.getPrice());
-        productAndProviderInfoWithBytes.setCtn(productAndProviderInfo.getCtn());
-        productAndProviderInfoWithBytes.setMoq(productAndProviderInfo.getMoq());
+        productInfoWithBytes.setDescription(productInfo.getDescriptionOfProduct()); //comments
+        productInfoWithBytes.setPrice(productInfo.getPrice());
+        productInfoWithBytes.setCtn(productInfo.getCtn());
+        productInfoWithBytes.setMoq(productInfo.getMoq());
 
-        // part with images
-        InputStream inputStream1 = productAndProviderInfo.getImageOfProvider().getInputStream();
-        byte[] imageOfProviderInBytes = IOUtils.toByteArray(inputStream1);
-        productAndProviderInfoWithBytes.setImageOfProviderWithBytes(imageOfProviderInBytes);
-        inputStream1.close();
-
-        InputStream inputStream2 = productAndProviderInfo.getImageOfProduct().getInputStream();
+        // part with product image
+        InputStream inputStream2 = productInfo.getImageOfProduct().getInputStream();
         byte[] imageOfProductInBytes = IOUtils.toByteArray(inputStream2);
-        productAndProviderInfoWithBytes.setImageOfProductWithBytes(imageOfProductInBytes);
+        productInfoWithBytes.setImageOfProductWithBytes(imageOfProductInBytes);
         inputStream2.close();
 
 
-        return productAndProviderInfoWithBytes;
+        return productInfoWithBytes;
     }
 
 
-    public void clearProductAndProviderInfoList() {
-        this.productAndProviderInfoWithBytesList.clear();
+    public void clearProductInfoList() {
+        this.productInfoWithBytesList.clear();
     }
 
 

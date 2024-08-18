@@ -1,8 +1,8 @@
 package com.example.excel.controller;
 
-import com.example.excel.entity.ProductAndProviderInfo;
-import com.example.excel.entity.ProductAndProviderInfoWithBytes;
 import com.example.excel.dto.ProductsCreationDTO;
+import com.example.excel.entity.bytes.ProductInfoWithBytes;
+import com.example.excel.entity.info.ProductInfo;
 import com.example.excel.service.ExcelService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -30,24 +30,28 @@ public class ExcelController {
     @PostMapping("/save")
     public ResponseEntity<byte[]> saveAfterClickingOK(@ModelAttribute ProductsCreationDTO form) throws IOException {
 
-        // part 1
-        for (ProductAndProviderInfo productAndProviderInfo : form.getProducts()) {
+        String nameOfProvider = form.getProviderInfo().getName(); // for name of file excel
 
-            this.excelService.save(productAndProviderInfo);
+        // part 1 - save products
+        for (ProductInfo productInfo : form.getProducts()) {
+            this.excelService.save(productInfo);
         }
 
-          // part 2
-        List<ProductAndProviderInfoWithBytes> data = this.excelService.getAllInfo();
+          // part 2 - generate excel
+        List<ProductInfoWithBytes> dataProducts = this.excelService.getAllInfoProducts();
 
-        byte[] excelContent = this.excelService.generateExcel(data);
+        byte[] excelContent = this.excelService.generateExcel(dataProducts,
+                form.getProviderInfo().getName(),
+                form.getProviderInfo().getImageOfProvider());
 
-        // clear list
+        // part 3 - clear list of products
         this.excelService.clearAllInfo();
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=data.xlsx")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Products_Info_Provider-" + nameOfProvider + ".xlsx")
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(excelContent);
     }
+
 
 }

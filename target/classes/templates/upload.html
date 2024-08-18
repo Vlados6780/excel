@@ -11,33 +11,38 @@
 <h1>Enter Product Details</h1>
 
 <form id="productForm" th:method="POST" enctype="multipart/form-data" th:action="@{/excel/save}" th:object="${form}">
-    <div class="product-block" th:each="product, iterStat : *{products}">
-        <!-- Provider Block -->
-        <div class="input-group provider-group">
-            <input type="file" name="file1" accept="image/*" capture="environment" required onchange="showProviderInputs(this)" />
-            <input type="text" name="providerName1" th:field="*{products[__${iterStat.index}__].nameOfProvider}" placeholder="Enter the name of provider" />
-        </div>
 
-        <!-- Product Block -->
-        <div class="input-group product-group">
-            <input type="file" name="file2" th:field="*{products[__${iterStat.index}__].imageOfProduct}" accept="image/*" capture="environment" required onchange="showProductInputs(this)" />
-        </div>
-        <div class="input-group product-group">
-            <input type="text" name="productDescription1" th:field="*{products[__${iterStat.index}__].descriptionOfProduct}" placeholder="Enter Comments" />
-            <input type="text" name="productPrice1" th:field="*{products[__${iterStat.index}__].price}" placeholder="Enter the Price" />
-            <input type="text" name="productMOQ1" th:field="*{products[__${iterStat.index}__].moq}" placeholder="Enter the MOQ" />
-            <input type="text" name="productCTN1" th:field="*{products[__${iterStat.index}__].ctn}" placeholder="Enter the CTN" />
-        </div>
+    <!-- provider block -->
+    <div class="input-group provider-group">
+        <input type="file" name="file1" th:field="*{providerInfo.imageOfProvider}" accept="image/*" capture="environment" required onchange="showProviderInputs(this)" />
+        <input type="text" name="providerName1" th:field="*{providerInfo.name}"  placeholder="Enter the name of provider" />
     </div>
-    <button id="addBlockBtn" type="button" onclick="addProductBlock()">+</button>
+
+    <div id="productBlocksContainer">
+        <div class="product-block" th:each="product, iterStat : *{products}">
+            <!-- product block -->
+            <div class="input-group product-group">
+                <input type="file" name="file2" th:field="*{products[__${iterStat.index}__].imageOfProduct}" accept="image/*" capture="environment" required onchange="showProductInputs(this)" />
+            </div>
+            <div class="input-group product-group">
+                <input type="text" name="productDescription1" th:field="*{products[__${iterStat.index}__].descriptionOfProduct}" placeholder="Enter Comments" />
+                <input type="text" name="productPrice1" th:field="*{products[__${iterStat.index}__].price}" placeholder="Enter the Price" />
+                <input type="text" name="productMOQ1" th:field="*{products[__${iterStat.index}__].moq}" placeholder="Enter the MOQ" />
+                <input type="text" name="productCTN1" th:field="*{products[__${iterStat.index}__].ctn}" placeholder="Enter the CTN" />
+            </div>
+        </div>
+        <button id="addBlockBtn" type="button" onclick="addProductBlock()">+</button>
+    </div>
+
     <br><br>
     <button id="submitBtn" type="submit">Save and Download Excel</button>
 </form>
 
-
-
 </body>
 </html>
+
+
+
 
 
 

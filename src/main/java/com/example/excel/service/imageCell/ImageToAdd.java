@@ -6,6 +6,7 @@ import java.io.IOException;
 
 public class ImageToAdd {
 
+    // logic adding image to cell
     public static void addImageToCell(Workbook workbook, Sheet sheet, byte[] imageBytes, int rowNum, int colNum) throws IOException {
         int pictureIdx = workbook.addPicture(imageBytes, Workbook.PICTURE_TYPE_PNG);
         CreationHelper helper = workbook.getCreationHelper();

@@ -4,6 +4,7 @@ import com.example.excel.dto.ProductsCreationDTO;
 import com.example.excel.entity.bytes.ProductInfoWithBytes;
 import com.example.excel.entity.info.ProductInfo;
 import com.example.excel.service.ExcelService;
+import com.example.excel.service.GenerationExcelService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import java.util.List;
 public class ExcelController {
 
     private final ExcelService excelService;
+    private final GenerationExcelService generationExcelService;
 
     @GetMapping()
     public String uploadPage(Model model) {
@@ -40,7 +42,7 @@ public class ExcelController {
           // part 2 - generate excel
         List<ProductInfoWithBytes> dataProducts = this.excelService.getAllInfoProducts();
 
-        byte[] excelContent = this.excelService.generateExcel(dataProducts,
+        byte[] excelContent = this.generationExcelService.generateExcel(dataProducts,
                 form.getProviderInfo().getName(),
                 form.getProviderInfo().getImageOfProvider());
 

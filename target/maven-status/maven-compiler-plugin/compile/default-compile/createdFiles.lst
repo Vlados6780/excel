@@ -6,6 +6,8 @@ com\example\excel\ExcelApplication.class
 com\example\excel\service\imageCell\ImageToAdd.class
 com\example\excel\entity\info\ProductInfo.class
 com\example\excel\entity\info\ProviderInfo.class
+com\example\excel\service\DefaultGenerationExcelService.class
+com\example\excel\service\GenerationExcelService.class
 com\example\excel\service\ExcelService.class
 com\example\excel\dto\ProductsCreationDTO.class
 com\example\excel\entity\bytes\ProductInfoWithBytes.class

@@ -38,7 +38,7 @@ public class DefaultGenerationExcelService implements GenerationExcelService {
             anchor.setCol2(1);
             anchor.setRow2(1);
             XSSFPicture picture = drawing.createPicture(anchor, pictureIdx);
-            picture.resize(1.0006,1.0);
+            picture.resize(1.002,1.0);
 
             sheet.setColumnWidth(1, 10000);
             Cell providerCell = row.createCell(1);
@@ -105,8 +105,9 @@ public class DefaultGenerationExcelService implements GenerationExcelService {
                 anchor2.setRow1(rowNum);
                 anchor2.setCol2(1);
                 anchor2.setRow2(++rowNum);
+                anchor2.setAnchorType(ClientAnchor.AnchorType.MOVE_AND_RESIZE);
                 XSSFPicture picture2 = drawing2.createPicture(anchor2, pictureIdx2);
-                picture2.resize(1.0006,1.0);
+                picture2.resize(1.0,1.0);
 
 
                 XSSFColor color3 = new XSSFColor(new java.awt.Color(231, 229, 229, 255), new DefaultIndexedColorMap());

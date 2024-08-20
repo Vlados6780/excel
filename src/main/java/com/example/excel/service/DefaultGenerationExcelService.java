@@ -107,7 +107,7 @@ public class DefaultGenerationExcelService implements GenerationExcelService {
                 anchor2.setRow2(++rowNum);
                 anchor2.setAnchorType(ClientAnchor.AnchorType.MOVE_AND_RESIZE);
                 XSSFPicture picture2 = drawing2.createPicture(anchor2, pictureIdx2);
-                picture2.resize(1.0,1.0);
+                picture2.resize(1.01,1.0);
 
 
                 XSSFColor color3 = new XSSFColor(new java.awt.Color(231, 229, 229, 255), new DefaultIndexedColorMap());

@@ -37,10 +37,6 @@ public class DefaultGenerationExcelService implements GenerationExcelService {
             anchor.setRow1(0);
             anchor.setCol2(1);
             anchor.setRow2(1);
-            anchor.setDx1(1023); // 1023 is the maximum value for Dx1
-            anchor.setDy1(0);
-            anchor.setDx2(0);
-            anchor.setDy2(0);
             XSSFPicture picture = drawing.createPicture(anchor, pictureIdx);
             picture.resize(1.01,1.0);
 

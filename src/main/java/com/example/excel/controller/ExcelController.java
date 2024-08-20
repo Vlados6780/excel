@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 
@@ -49,8 +51,11 @@ public class ExcelController {
         // part 3 - clear list of products
         this.excelService.clearAllInfo();
 
+        // URL-encode the filename to support special characters
+        String encodedFileName = URLEncoder.encode("Products_Info_Provider-" + nameOfProvider + ".xlsx", StandardCharsets.UTF_8.toString());
+
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Products_Info_Provider-" + nameOfProvider + ".xlsx")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename*=UTF-8''" + encodedFileName)
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(excelContent);
     }

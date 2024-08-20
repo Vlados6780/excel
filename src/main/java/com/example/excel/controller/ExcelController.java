@@ -44,7 +44,7 @@ public class ExcelController {
           // part 2 - generate excel
         List<ProductInfoWithBytes> dataProducts = this.excelService.getAllInfoProducts();
 
-        byte[] excelContent = this.generationExcelService.generateExcelTest(dataProducts,
+        byte[] excelContent = this.generationExcelService.generateExcel(dataProducts,
                 form.getProviderInfo().getName(),
                 form.getProviderInfo().getImageOfProvider());
 

@@ -3,7 +3,6 @@ com\example\excel\controller\ExcelController.class
 com\example\excel\dao\DefaultProductAndProviderInfoDAO.class
 com\example\excel\service\compressor\ImageCompressor.class
 com\example\excel\ExcelApplication.class
-com\example\excel\service\imageCell\ImageToAdd.class
 com\example\excel\entity\info\ProductInfo.class
 com\example\excel\entity\info\ProviderInfo.class
 com\example\excel\service\DefaultGenerationExcelService.class

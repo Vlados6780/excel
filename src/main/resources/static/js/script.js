@@ -26,7 +26,7 @@ function addProductBlock() {
             </div>
             <div class="input-group product-group">
                 <input type="text" name="products[${productBlockCount}].descriptionOfProduct" placeholder="Enter Comments" />
-                <input type="text" name="products[${productBlockCount}].price" placeholder="Enter the Price" />
+                <input type="text" name="products[${productBlockCount}].price" placeholder="Enter the Price" inputmode="numeric" />
                 <input type="text" name="products[${productBlockCount}].moq" placeholder="Enter the MOQ" />
                 <input type="text" name="products[${productBlockCount}].ctn" placeholder="Enter the CTN" />
             </div>`;

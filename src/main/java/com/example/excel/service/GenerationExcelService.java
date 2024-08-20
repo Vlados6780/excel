@@ -9,5 +9,4 @@ import java.util.List;
 public interface GenerationExcelService {
     byte[] generateExcel(List<ProductInfoWithBytes> data, String nameOfProvider, MultipartFile imageOfProvider) throws IOException;
 
-    byte[] generateExcelTest(List<ProductInfoWithBytes> data, String nameOfProvider, MultipartFile imageOfProvider) throws IOException;
 }

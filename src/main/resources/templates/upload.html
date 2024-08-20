@@ -26,7 +26,7 @@
             </div>
             <div class="input-group product-group">
                 <input type="text" name="productDescription1" th:field="*{products[__${iterStat.index}__].descriptionOfProduct}" placeholder="Enter Comments" />
-                <input type="text" name="productPrice1" th:field="*{products[__${iterStat.index}__].price}" placeholder="Enter the Price" />
+                <input type="text" name="productPrice1" th:field="*{products[__${iterStat.index}__].price}" placeholder="Enter the Price" inputmode="numeric" />
                 <input type="text" name="productMOQ1" th:field="*{products[__${iterStat.index}__].moq}" placeholder="Enter the MOQ" />
                 <input type="text" name="productCTN1" th:field="*{products[__${iterStat.index}__].ctn}" placeholder="Enter the CTN" />
             </div>

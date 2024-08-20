@@ -4,12 +4,9 @@ import com.example.excel.entity.bytes.ProductInfoWithBytes;
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.xssf.usermodel.DefaultIndexedColorMap;
-import org.apache.poi.xssf.usermodel.XSSFColor;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -119,6 +116,35 @@ public class DefaultGenerationExcelService implements GenerationExcelService {
         }
     }
 
+    @Override
+    public byte[] generateExcelTest(List<ProductInfoWithBytes> data, String nameOfProvider, MultipartFile imageOfProvider) throws IOException {
+        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+
+            Sheet sheet = workbook.createSheet("Provider - " + nameOfProvider);
+
+            // part of code
+            Row row = sheet.createRow(0);
+            sheet.setColumnWidth(0, 14934);
+            row.setHeightInPoints(209.55f);
+
+            InputStream inputStream = imageOfProvider.getInputStream();
+            byte[] imageOfProviderInBytes = IOUtils.toByteArray(inputStream);
+            inputStream.close();
+            byte[] compressedImageOfProvider = compressImage(imageOfProviderInBytes, 300, 300, 0.75f);
+            int pictureIdx = workbook.addPicture(compressedImageOfProvider, Workbook.PICTURE_TYPE_JPEG);
+            XSSFDrawing drawing = (XSSFDrawing) sheet.createDrawingPatriarch();
+            XSSFClientAnchor anchor = new XSSFClientAnchor();
+            anchor.setCol1(0); // левая верхняя ячейка (столбец)
+            anchor.setRow1(0); // левая верхняя ячейка (строка)
+            anchor.setCol2(1); // правая нижняя ячейка (столбец)
+            anchor.setRow2(1); // правая нижняя ячейка (строка)
+            XSSFPicture picture = drawing.createPicture(anchor, pictureIdx);
+            picture.resize(1.002,1.0);
+
+            workbook.write(out);
+            return out.toByteArray();
+        }
+    }
 
 
 }

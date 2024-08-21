@@ -5,6 +5,7 @@
     <title>Product Excel Program</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <script th:src="@{/js/script.js}"></script>
+    <script src="https://unpkg.com/exif-js@2.3.0/exif.js"></script>
 
 </head>
 <body>
@@ -14,7 +15,7 @@
 
     <!-- provider block -->
     <div class="input-group provider-group">
-        <input type="file" name="file1" th:field="*{providerInfo.imageOfProvider}" accept="image/*" capture="environment" required onchange="showProviderInputs(this);processImage(this)" />
+        <input type="file" name="file1" th:field="*{providerInfo.imageOfProvider}" accept="image/*" capture="environment" required onchange="showProviderInputs(this)" />
         <input type="text" name="providerName1" th:field="*{providerInfo.name}"  placeholder="Enter the name of provider" />
     </div>
 

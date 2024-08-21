@@ -1,11 +1,20 @@
 package com.example.excel.service;
 
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.exif.ExifIFD0Directory;
 import com.example.excel.entity.bytes.ProductInfoWithBytes;
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.imageio.ImageIO;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,7 +38,16 @@ public class DefaultGenerationExcelService implements GenerationExcelService {
             InputStream inputStream = imageOfProvider.getInputStream();
             byte[] imageOfProviderInBytes = IOUtils.toByteArray(inputStream);
             inputStream.close();
-            byte[] compressedImageOfProvider = compressImage(imageOfProviderInBytes, 300, 300, 0.75f);
+
+            // Correct image orientation
+            BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(imageOfProviderInBytes));
+            bufferedImage = correctImageOrientation(bufferedImage, imageOfProviderInBytes);
+
+            // Compress and convert the corrected image back to bytes
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(bufferedImage, "jpeg", baos);
+
+            byte[] compressedImageOfProvider = compressImage(baos.toByteArray(), 300, 300, 0.75f);
             int pictureIdx = workbook.addPicture(compressedImageOfProvider, Workbook.PICTURE_TYPE_JPEG);
             XSSFDrawing drawing = (XSSFDrawing) sheet.createDrawingPatriarch();
             XSSFClientAnchor anchor = new XSSFClientAnchor();
@@ -98,6 +116,10 @@ public class DefaultGenerationExcelService implements GenerationExcelService {
                 row3.setHeightInPoints(209.55f);
 
                 byte[] compressedImageOfProduct = compressImage(info.getImageOfProductWithBytes(), 300, 300, 0.75f);
+
+
+
+
                 int pictureIdx2 = workbook.addPicture(compressedImageOfProduct, Workbook.PICTURE_TYPE_JPEG);
                 XSSFDrawing drawing2 = (XSSFDrawing) sheet.createDrawingPatriarch();
                 XSSFClientAnchor anchor2 = new XSSFClientAnchor();
@@ -105,11 +127,11 @@ public class DefaultGenerationExcelService implements GenerationExcelService {
                 anchor2.setRow1(rowNum);
                 anchor2.setCol2(1);
                 anchor2.setRow2(++rowNum);
-                anchor2.setDx1(560000);
+                anchor2.setDx1(630000);
                 anchor2.setDy1(350000);
 
                 XSSFPicture picture2 = drawing2.createPicture(anchor2, pictureIdx2);
-                picture2.resize(0.65,0.93);
+                picture2.resize(0.74,0.93);
 
                 Cell cellProductPicture = row3.createCell(0);
                 CellStyle styleProductPicture = workbook.createCellStyle();
@@ -166,6 +188,37 @@ public class DefaultGenerationExcelService implements GenerationExcelService {
             workbook.write(out);
             return out.toByteArray();
         }
+    }
+
+    private BufferedImage correctImageOrientation(BufferedImage image, byte[] imageBytes) throws IOException {
+        try {
+            Metadata metadata = ImageMetadataReader.readMetadata(new ByteArrayInputStream(imageBytes));
+            ExifIFD0Directory directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
+            if (directory != null && directory.containsTag(ExifIFD0Directory.TAG_ORIENTATION)) {
+                int orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
+
+                AffineTransform transform = new AffineTransform();
+                switch (orientation) {
+                    case 6: // 90 degrees clockwise
+                        transform.rotate(Math.toRadians(90), image.getWidth() / 2.0, image.getHeight() / 2.0);
+                        transform.translate(0, -image.getWidth());
+                        break;
+                    case 3: // 180 degrees
+                        transform.rotate(Math.toRadians(180), image.getWidth() / 2.0, image.getHeight() / 2.0);
+                        transform.translate(-image.getWidth(), -image.getHeight());
+                        break;
+                    case 8: // 90 degrees counterclockwise
+                        transform.rotate(Math.toRadians(-90), image.getWidth() / 2.0, image.getHeight() / 2.0);
+                        transform.translate(-image.getHeight(), 0);
+                        break;
+                }
+                AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
+                image = op.filter(image, null);
+            }
+        } catch (Exception e) {
+            // Handle exceptions such as missing EXIF data or unknown orientations
+        }
+        return image;
     }
 
 }

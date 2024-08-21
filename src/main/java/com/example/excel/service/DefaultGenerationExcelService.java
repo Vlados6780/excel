@@ -105,10 +105,19 @@ public class DefaultGenerationExcelService implements GenerationExcelService {
                 anchor2.setRow1(rowNum);
                 anchor2.setCol2(1);
                 anchor2.setRow2(++rowNum);
-                anchor2.setAnchorType(ClientAnchor.AnchorType.MOVE_AND_RESIZE);
-                XSSFPicture picture2 = drawing2.createPicture(anchor2, pictureIdx2);
-                picture2.resize(1.01,1.0);
+                anchor2.setDx1(410000);
+                anchor2.setDy1(350000);
 
+                XSSFPicture picture2 = drawing2.createPicture(anchor2, pictureIdx2);
+                picture2.resize(0.93,0.93);
+
+                Cell cellProductPicture = row3.createCell(0);
+                CellStyle styleProductPicture = workbook.createCellStyle();
+                styleProductPicture.setBorderTop(BorderStyle.THICK);
+                styleProductPicture.setBorderBottom(BorderStyle.THICK);
+                styleProductPicture.setBorderLeft(BorderStyle.THICK);
+                styleProductPicture.setBorderRight(BorderStyle.THICK);
+                cellProductPicture.setCellStyle(styleProductPicture);
 
                 XSSFColor color3 = new XSSFColor(new java.awt.Color(231, 229, 229, 255), new DefaultIndexedColorMap());
                 CellStyle centeredStyle3 = workbook.createCellStyle();
@@ -124,8 +133,8 @@ public class DefaultGenerationExcelService implements GenerationExcelService {
 
                 row3.createCell(1).setCellValue(info.getDescription());
                 row3.getCell(1).setCellStyle(centeredStyle3);
-                String priceStr = info.getPrice().replace(",", ".");
 
+                String priceStr = info.getPrice().replace(",", ".");
                 if (!priceStr.isEmpty()) {
                     row3.createCell(2).setCellValue(Double.parseDouble(priceStr));
                     row3.getCell(2).setCellStyle(centeredStyle3);
@@ -134,23 +143,23 @@ public class DefaultGenerationExcelService implements GenerationExcelService {
                     row3.getCell(2).setCellStyle(centeredStyle3);
                 }
 
-                row3.createCell(3).setCellValue(info.getMoq());
-                row3.getCell(3).setCellStyle(centeredStyle3);
-                row3.createCell(4).setCellValue(info.getCtn());
-                row3.getCell(4).setCellStyle(centeredStyle3);
-
-                Row row4 = sheet.createRow(rowNum);
-                CellStyle thickBorderStyle = workbook.createCellStyle();
-                thickBorderStyle.setBorderTop(BorderStyle.THICK);
-                thickBorderStyle.setBorderBottom(BorderStyle.THICK);
-                thickBorderStyle.setBorderLeft(BorderStyle.THICK);
-                thickBorderStyle.setBorderRight(BorderStyle.THICK);
-
-                for (int i = 0; i < 5; i++) {
-                    row4.createCell(i).setCellStyle(thickBorderStyle);
+                String moqStr = info.getMoq().replace(",", ".");
+                if (!moqStr.isEmpty()) {
+                    row3.createCell(3).setCellValue(Double.parseDouble(moqStr));
+                    row3.getCell(3).setCellStyle(centeredStyle3);
+                } else {
+                    row3.createCell(3);
+                    row3.getCell(3).setCellStyle(centeredStyle3);
                 }
 
-                rowNum++;
+                String ctnStr = info.getCtn().replace(",", ".");
+                if (!ctnStr.isEmpty()) {
+                    row3.createCell(4).setCellValue(Double.parseDouble(ctnStr));
+                    row3.getCell(4).setCellStyle(centeredStyle3);
+                } else {
+                    row3.createCell(4);
+                    row3.getCell(4).setCellStyle(centeredStyle3);
+                }
 
             }
 
@@ -158,6 +167,5 @@ public class DefaultGenerationExcelService implements GenerationExcelService {
             return out.toByteArray();
         }
     }
-
 
 }

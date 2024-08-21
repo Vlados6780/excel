@@ -27,8 +27,8 @@ function addProductBlock() {
             <div class="input-group product-group">
                 <input type="text" name="products[${productBlockCount}].descriptionOfProduct" placeholder="Enter Comments" />
                 <input type="text" name="products[${productBlockCount}].price" placeholder="Enter the Price" inputmode="decimal" />
-                <input type="text" name="products[${productBlockCount}].moq" placeholder="Enter the MOQ" />
-                <input type="text" name="products[${productBlockCount}].ctn" placeholder="Enter the CTN" />
+                <input type="text" name="products[${productBlockCount}].moq" placeholder="Enter the MOQ"  inputmode="decimal" />
+                <input type="text" name="products[${productBlockCount}].ctn" placeholder="Enter the CTN"  inputmode="decimal" />
             </div>`;
 
         // move down the block of text inputs

@@ -39,56 +39,19 @@ function addProductBlock() {
     container.appendChild(addBlockBtn);
 }
 
-function processImage(input) {
-    const file = input.files[0];
-    const reader = new FileReader();
-
-    reader.onload = function(e) {
-        const img = new Image();
-        img.onload = function() {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-
-            const width = img.width;
-            const height = img.height;
-
-            // Создаем canvas с размером изображения
-            canvas.width = width;
-            canvas.height = height;
-
-            // Определяем ориентацию изображения на основе EXIF-данных
-            EXIF.getData(img, function() {
-                const orientation = EXIF.getTag(this, 'Orientation');
-
-                // Поворачиваем изображение в зависимости от ориентации
-                if (orientation === 6) {
-                    canvas.width = height;
-                    canvas.height = width;
-                    ctx.rotate(90 * Math.PI / 180);
-                    ctx.drawImage(img, 0, -height);
-                } else if (orientation === 8) {
-                    canvas.width = height;
-                    canvas.height = width;
-                    ctx.rotate(-90 * Math.PI / 180);
-                    ctx.drawImage(img, -width, 0);
-                } else if (orientation === 3) {
-                    ctx.rotate(180 * Math.PI / 180);
-                    ctx.drawImage(img, -width, -height);
-                } else {
-                    ctx.drawImage(img, 0, 0);
-                }
-
-                // Конвертируем canvas обратно в файл
-                canvas.toBlob(function(blob) {
-                    const fileInput = new File([blob], file.name, {type: file.type});
-                    const dataTransfer = new DataTransfer();
-                    dataTransfer.items.add(fileInput);
-                    input.files = dataTransfer.files;
+function processImage(inputElement) {
+    inputElement.onchange = (e) => {
+        e.preventDefault();
+        loadImage(
+            e.target.files[0],
+            (img) => {
+                img.toBlob((blob) => {
+                    setImage(blob);
+                    onDrop(URL.createObjectURL(blob));
                 });
-            });
-        };
-        img.src = e.target.result;
+            },
+            { maxWidth: 400, canvas: true, orientation: true }
+        );
     };
-    reader.readAsDataURL(file);
 }
 

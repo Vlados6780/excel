@@ -39,21 +39,10 @@ function addProductBlock() {
     container.appendChild(addBlockBtn);
 }
 
-import { fixImageOrientation } from 'exif-orientation-fixer.js';
-
-async function handleImageOrientation(fileInput, callback) {
-    const file = fileInput.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = async (event) => {
-        const blob = await fixImageOrientation(event.target.result);
-        const url = URL.createObjectURL(blob);
-        const img = new Image();
-        img.src = url;
-        img.onload = () => {
-            callback();
-        };
-    };
-    reader.readAsDataURL(file);
+function rotateImage(input) {
+    var rotated = input.parentElement.querySelector('img');
+    if (rotated) {
+        rotated.style.transform = "rotate(90deg)";
+    }
 }
+

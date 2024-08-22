@@ -38,8 +38,8 @@ public class DefaultGenerationExcelService implements GenerationExcelService {
             anchor.setRow1(0);
             anchor.setCol2(1);
             anchor.setRow2(1);
-            anchor.setDx1(-670000);
-            anchor.setDy2(-350000);
+            anchor.setDx1(-690000);
+            anchor.setDy2(-860000);
 
             XSSFPicture picture = drawing.createPicture(anchor, pictureIdx);
             picture.resize(1.01,1.0);
@@ -110,11 +110,11 @@ public class DefaultGenerationExcelService implements GenerationExcelService {
                 anchor2.setRow1(rowNum);
                 anchor2.setCol2(1);
                 anchor2.setRow2(++rowNum);
-                anchor2.setDx1(530000);
+                anchor2.setDx1(430000);
                 anchor2.setDy1(350000);
 
                 XSSFPicture picture2 = drawing2.createPicture(anchor2, pictureIdx2);
-                picture2.resize(0.91,0.93);
+                picture2.resize(0.95,0.93);
 
                 Cell cellProductPicture = row3.createCell(0);
                 CellStyle styleProductPicture = workbook.createCellStyle();

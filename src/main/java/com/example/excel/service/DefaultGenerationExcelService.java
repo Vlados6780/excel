@@ -42,7 +42,7 @@ public class DefaultGenerationExcelService implements GenerationExcelService {
             anchor.setDy2(0);
 
             XSSFPicture picture = drawing.createPicture(anchor, pictureIdx);
-            picture.resize(1.01,1.0);
+            picture.resize(0.96,1.0);
 
             sheet.setColumnWidth(1, 10000);
             Cell providerCell = row.createCell(1);
@@ -114,7 +114,7 @@ public class DefaultGenerationExcelService implements GenerationExcelService {
                 anchor2.setDy1(440000);
 
                 XSSFPicture picture2 = drawing2.createPicture(anchor2, pictureIdx2);
-                picture2.resize(0.95,0.93);
+                picture2.resize(0.96,0.96);
 
                 Cell cellProductPicture = row3.createCell(0);
                 CellStyle styleProductPicture = workbook.createCellStyle();

@@ -39,7 +39,7 @@ public class DefaultGenerationExcelService implements GenerationExcelService {
             anchor.setCol2(1);
             anchor.setRow2(1);
             anchor.setDx1(0);
-            anchor.setDy1(0);
+            anchor.setDy1(300000);
             anchor.setDy2(0);
             anchor.setDx2(0);
 
@@ -48,6 +48,7 @@ public class DefaultGenerationExcelService implements GenerationExcelService {
 
             sheet.setColumnWidth(1, 10000);
             Cell providerCell = row.createCell(1);
+            Cell providerPicture = row.createCell(0);
             providerCell.setCellValue("Provider:   " + nameOfProvider);
             // center the provider's name
             XSSFColor color1 = new XSSFColor(new java.awt.Color(226, 239, 57), new DefaultIndexedColorMap());
@@ -62,6 +63,12 @@ public class DefaultGenerationExcelService implements GenerationExcelService {
             centeredStyle.setBorderRight(BorderStyle.THICK);
             providerCell.setCellStyle(centeredStyle);
 
+            CellStyle stylePictProvider = workbook.createCellStyle();
+            stylePictProvider.setBorderTop(BorderStyle.THICK);
+            stylePictProvider.setBorderBottom(BorderStyle.THICK);
+            stylePictProvider.setBorderLeft(BorderStyle.THICK);
+            stylePictProvider.setBorderRight(BorderStyle.THICK);
+            providerPicture.setCellStyle(stylePictProvider);
 
             Row row2 = sheet.createRow(2);
             row2.setHeightInPoints(50f);

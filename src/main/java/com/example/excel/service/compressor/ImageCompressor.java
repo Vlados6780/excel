@@ -1,10 +1,10 @@
 package com.example.excel.service.compressor;
+
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.MetadataException;
 import com.drew.metadata.exif.ExifIFD0Directory;
-
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -12,7 +12,10 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+
 public class ImageCompressor {
+
+    // logic with compressing image and rotation
 
     // logic compressing image
     public static byte[] compressImage(byte[] imageBytes, int targetWidth, int targetHeight, float quality) throws IOException {
@@ -40,6 +43,9 @@ public class ImageCompressor {
             width = (int) (targetHeight * aspectRatio);
         }
 
+        // crop the image to remove any black borders
+        originalImage = cropImageToAspectRatio(originalImage, aspectRatio);
+
         // resize the image
         Image scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         BufferedImage resizedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -55,7 +61,6 @@ public class ImageCompressor {
         return compressedImageStream.toByteArray();
     }
 
-
     private static BufferedImage rotateImage(BufferedImage originalImage, double angle) {
         int width = originalImage.getWidth();
         int height = originalImage.getHeight();
@@ -67,9 +72,26 @@ public class ImageCompressor {
         return rotatedImage;
     }
 
-    // method is needed to extract the orientation of an image from EXIF metadata
+    private static BufferedImage cropImageToAspectRatio(BufferedImage originalImage, float aspectRatio) {
+        int width = originalImage.getWidth();
+        int height = originalImage.getHeight();
+
+        int newWidth = width;
+        int newHeight = (int) (newWidth / aspectRatio);
+
+        if (newHeight > height) {
+            newHeight = height;
+            newWidth = (int) (newHeight * aspectRatio);
+        }
+
+        int x = (width - newWidth) / 2;
+        int y = (height - newHeight) / 2;
+
+        return originalImage.getSubimage(x, y, newWidth, newHeight);
+    }
+
+    // the method is needed to extract the image orientation from EXIF metadata
     private static int getOrientation(byte[] imageBytes) throws IOException {
-        // используем библиотеку metadata-extractor для получения метаданных EXIF
         try (ByteArrayInputStream bais = new ByteArrayInputStream(imageBytes)) {
             Metadata metadata = ImageMetadataReader.readMetadata(bais);
             ExifIFD0Directory directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);

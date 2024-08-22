@@ -47,6 +47,7 @@ public class ImageCompressor {
         Image scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         BufferedImage resizedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = resizedImage.createGraphics();
+        g2d.setColor(Color.WHITE);
         g2d.drawImage(scaledImage, 0, 0, null);
         g2d.dispose();
 

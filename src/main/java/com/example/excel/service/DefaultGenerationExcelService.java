@@ -38,6 +38,7 @@ public class DefaultGenerationExcelService implements GenerationExcelService {
             anchor.setRow1(0);
             anchor.setCol2(1);
             anchor.setRow2(1);
+            anchor.setDx1(-400000);
             XSSFPicture picture = drawing.createPicture(anchor, pictureIdx);
             picture.resize(1.01,1.0);
 

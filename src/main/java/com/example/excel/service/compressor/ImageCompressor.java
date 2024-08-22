@@ -5,8 +5,8 @@ import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.MetadataException;
 import com.drew.metadata.exif.ExifIFD0Directory;
-import java.awt.Graphics2D;
-import java.awt.Image;
+
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -43,9 +43,6 @@ public class ImageCompressor {
             width = (int) (targetHeight * aspectRatio);
         }
 
-        // crop the image to remove any black borders
-        originalImage = cropImageToAspectRatio(originalImage, aspectRatio);
-
         // resize the image
         Image scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         BufferedImage resizedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -66,28 +63,11 @@ public class ImageCompressor {
         int height = originalImage.getHeight();
         BufferedImage rotatedImage = new BufferedImage(height, width, originalImage.getType());
         Graphics2D g2d = rotatedImage.createGraphics();
+        g2d.setColor(Color.WHITE);
         g2d.rotate(Math.toRadians(angle), width / 2, height / 2);
         g2d.drawImage(originalImage, 0, 0, null);
         g2d.dispose();
         return rotatedImage;
-    }
-
-    private static BufferedImage cropImageToAspectRatio(BufferedImage originalImage, float aspectRatio) {
-        int width = originalImage.getWidth();
-        int height = originalImage.getHeight();
-
-        int newWidth = width;
-        int newHeight = (int) (newWidth / aspectRatio);
-
-        if (newHeight > height) {
-            newHeight = height;
-            newWidth = (int) (newHeight * aspectRatio);
-        }
-
-        int x = (width - newWidth) / 2;
-        int y = (height - newHeight) / 2;
-
-        return originalImage.getSubimage(x, y, newWidth, newHeight);
     }
 
     // the method is needed to extract the image orientation from EXIF metadata

@@ -1,4 +1,10 @@
 package com.example.excel.service.compressor;
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.imaging.ImageProcessingException;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.MetadataException;
+import com.drew.metadata.exif.ExifIFD0Directory;
+
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -12,6 +18,12 @@ public class ImageCompressor {
     public static byte[] compressImage(byte[] imageBytes, int targetWidth, int targetHeight, float quality) throws IOException {
         // convert byte array to BufferedImage
         BufferedImage originalImage = ImageIO.read(new ByteArrayInputStream(imageBytes));
+
+        // detect orientation and rotate the image if needed
+        int orientation = getOrientation(imageBytes); // method for getting image orientation
+        if (orientation == 6) { // if orientation is 6 then a 90-degree clockwise rotation is required
+            originalImage = rotateImage(originalImage, 90);
+        }
 
         // calculate aspect ratio to maintain the quality and proportions
         int width = originalImage.getWidth();
@@ -41,5 +53,32 @@ public class ImageCompressor {
 
         // return the compressed image bytes
         return compressedImageStream.toByteArray();
+    }
+
+
+    private static BufferedImage rotateImage(BufferedImage originalImage, double angle) {
+        int width = originalImage.getWidth();
+        int height = originalImage.getHeight();
+        BufferedImage rotatedImage = new BufferedImage(height, width, originalImage.getType());
+        Graphics2D g2d = rotatedImage.createGraphics();
+        g2d.rotate(Math.toRadians(angle), width / 2, height / 2);
+        g2d.drawImage(originalImage, 0, 0, null);
+        g2d.dispose();
+        return rotatedImage;
+    }
+
+    // method is needed to extract the orientation of an image from EXIF metadata
+    private static int getOrientation(byte[] imageBytes) throws IOException {
+        // используем библиотеку metadata-extractor для получения метаданных EXIF
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(imageBytes)) {
+            Metadata metadata = ImageMetadataReader.readMetadata(bais);
+            ExifIFD0Directory directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
+            if (directory != null && directory.containsTag(ExifIFD0Directory.TAG_ORIENTATION)) {
+                return directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
+            }
+        } catch (ImageProcessingException | MetadataException e) {
+            e.printStackTrace();
+        }
+        return 1; // by default, we assume that orientation is 1 (no rotation)
     }
 }

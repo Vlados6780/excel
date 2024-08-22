@@ -39,10 +39,4 @@ function addProductBlock() {
     container.appendChild(addBlockBtn);
 }
 
-function rotateImage(input) {
-    var rotated = input.parentElement.querySelector('img');
-    if (rotated) {
-        rotated.style.transform = "rotate(90deg)";
-    }
-}
 

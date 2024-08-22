@@ -14,7 +14,7 @@
 
     <!-- provider block -->
     <div class="input-group provider-group">
-        <input type="file" name="file1" th:field="*{providerInfo.imageOfProvider}" accept="image/*" capture="environment" required onchange="showProviderInputs(this); rotateImage(this);" />
+        <input type="file" name="file1" th:field="*{providerInfo.imageOfProvider}" accept="image/*" capture="environment" required onchange="showProviderInputs(this)" />
         <input type="text" name="providerName1" th:field="*{providerInfo.name}"  placeholder="Enter the name of provider" />
     </div>
 

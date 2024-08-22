@@ -47,7 +47,6 @@ public class ImageCompressor {
         Image scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         BufferedImage resizedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = resizedImage.createGraphics();
-        g2d.setColor(Color.WHITE);
         g2d.drawImage(scaledImage, 0, 0, null);
         g2d.dispose();
 
@@ -64,7 +63,8 @@ public class ImageCompressor {
         int height = originalImage.getHeight();
         BufferedImage rotatedImage = new BufferedImage(height, width, originalImage.getType());
         Graphics2D g2d = rotatedImage.createGraphics();
-        g2d.setColor(Color.WHITE);
+        g2d.setBackground(Color.WHITE);
+        g2d.clearRect(0, 0, rotatedImage.getWidth(), rotatedImage.getHeight());
         g2d.rotate(Math.toRadians(angle), width / 2, height / 2);
         g2d.drawImage(originalImage, 0, 0, null);
         g2d.dispose();

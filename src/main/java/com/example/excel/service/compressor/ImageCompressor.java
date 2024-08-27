@@ -63,10 +63,10 @@ public class ImageCompressor {
         int height = originalImage.getHeight();
         BufferedImage rotatedImage = new BufferedImage(height, width, originalImage.getType());
         Graphics2D g2d = rotatedImage.createGraphics();
-        g2d.setBackground(Color.WHITE);
+        g2d.setBackground(Color.BLUE);
         g2d.clearRect(0, 0, rotatedImage.getWidth(), rotatedImage.getHeight());
-        g2d.rotate(Math.toRadians(angle), width / 2, height / 2);
         g2d.drawImage(originalImage, 0, 0, null);
+        g2d.rotate(Math.toRadians(angle), width / 2, height / 2);
         g2d.dispose();
         return rotatedImage;
     }
@@ -85,3 +85,4 @@ public class ImageCompressor {
         return 1; // by default, we assume that orientation is 1 (no rotation)
     }
 }
+

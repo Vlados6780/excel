@@ -61,13 +61,25 @@ public class ImageCompressor {
     private static BufferedImage rotateImage(BufferedImage originalImage, double angle) {
         int width = originalImage.getWidth();
         int height = originalImage.getHeight();
+
+        // new prob
+        double rad = Math.toRadians(angle);
+        double eps = 1e-3;
+        int W=(int)(Math.abs(Math.cos(rad))*width+Math.abs(Math.sin(rad))*height-eps)+1;//W after rotation(calculated by using a little geometry )
+        int H=(int)(Math.abs(Math.sin(rad))*width+Math.abs(Math.cos(rad))*height-eps)+1;//H after rotation
+
         BufferedImage rotatedImage = new BufferedImage(height, width, originalImage.getType());
         Graphics2D g2d = rotatedImage.createGraphics();
-        g2d.setBackground(Color.BLUE);
-        g2d.clearRect(0, 0, rotatedImage.getWidth(), rotatedImage.getHeight());
+        //g2d.setBackground(Color.BLUE);
+        //g2d.clearRect(0, 0, rotatedImage.getWidth(), rotatedImage.getHeight());
+        g2d.setColor(Color.RED); // background color of red for displaying the red edges when image is not completely fit
+        g2d.fillRect(0, 0, W, H);
+        int x=(W-width)/2;
+        int y=(H-height)/2;
+        g2d.translate(x, y);
         g2d.rotate(Math.toRadians(angle), width / 2, height / 2);
         g2d.drawImage(originalImage, 0, 0, null);
-        g2d.dispose();
+        //g2d.dispose();
         return rotatedImage;
     }
 

@@ -45,10 +45,8 @@ public class DefaultProductAndProviderInfoDAO implements ProductAndProviderInfoD
         productInfoWithBytes.setImageOfProductWithBytes(imageOfProductInBytes);
         inputStream2.close();
 
-
         return productInfoWithBytes;
     }
-
 
     public void clearProductInfoList() {
         this.productInfoWithBytesList.clear();

@@ -65,8 +65,8 @@ public class ImageCompressor {
         Graphics2D g2d = rotatedImage.createGraphics();
         g2d.setBackground(Color.BLUE);
         g2d.clearRect(0, 0, rotatedImage.getWidth(), rotatedImage.getHeight());
-        g2d.drawImage(originalImage, 0, 0, null);
         g2d.rotate(Math.toRadians(angle), width / 2, height / 2);
+        g2d.drawImage(originalImage, 0, 0, null);
         g2d.dispose();
         return rotatedImage;
     }

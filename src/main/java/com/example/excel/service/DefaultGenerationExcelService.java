@@ -146,6 +146,12 @@ public class DefaultGenerationExcelService implements GenerationExcelService {
                 row3.createCell(1).setCellValue(info.getDescription());
                 row3.getCell(1).setCellStyle(centeredStyle3);
 
+                // trying fix the bug
+                if (info.getDescription().isEmpty()) {
+                    row3.createCell(1).setCellValue("   ");
+                    row3.getCell(1).setCellStyle(centeredStyle3);
+                }
+
                 String priceStr = info.getPrice().replace(",", ".");
                 if (!priceStr.isEmpty()) {
                     row3.createCell(2).setCellValue(Double.parseDouble(priceStr));

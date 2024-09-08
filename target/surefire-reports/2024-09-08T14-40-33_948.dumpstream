@@ -1,4 +1,4 @@
-# Created at 2024-09-08T14:29:39.057
+# Created at 2024-09-08T14:40:34.393
 Boot Manifest-JAR contains absolute paths in classpath 'D:\university\som\excel_project\excel\target\test-classes'
 Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
 'other' has different root

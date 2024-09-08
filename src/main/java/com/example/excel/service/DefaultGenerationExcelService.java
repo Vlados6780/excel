@@ -9,6 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import static com.example.excel.service.compressor.ImageCompressor.compressImage;
@@ -17,7 +19,11 @@ import static com.example.excel.service.compressor.ImageCompressor.compressImage
 public class DefaultGenerationExcelService implements GenerationExcelService {
 
     @Override
-    public byte[] generateExcel(List<ProductInfoWithBytes> data, String nameOfProvider, MultipartFile imageOfProvider) throws IOException {
+    public byte[] generateExcel(List<ProductInfoWithBytes> products, String nameOfProvider, MultipartFile imageOfProvider) throws IOException {
+
+        // remove duplicates if necessary
+        List<ProductInfoWithBytes> data = new ArrayList<>(new HashSet<>(products));
+
         try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
 
             Sheet sheet = workbook.createSheet("Provider - " + nameOfProvider);

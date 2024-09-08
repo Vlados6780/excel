@@ -7,6 +7,6 @@ import java.io.IOException;
 import java.util.List;
 
 public interface GenerationExcelService {
-    byte[] generateExcel(List<ProductInfoWithBytes> products, String nameOfProvider, MultipartFile imageOfProvider) throws IOException;
+    byte[] generateExcel(List<ProductInfoWithBytes> data, String nameOfProvider, MultipartFile imageOfProvider) throws IOException;
 
 }
